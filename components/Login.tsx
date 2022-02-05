@@ -1,6 +1,5 @@
 import {
   AspectRatio,
-  Box,
   Button,
   Center,
   Container,
@@ -19,7 +18,6 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import ErrorToast from "./ErrorToast";
 
@@ -42,7 +40,6 @@ const Login = () => {
   const { toggleColorMode, colorMode } = useColorMode();
   const color = useColorModeValue("brand.black", "brand.white");
   const toast = useToast();
-  const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
     register,
@@ -53,10 +50,9 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<LoginForm> = async ({ email, password }) => {
     try {
-      setLoading(true);
       const { error, user } = await supabase.auth.signIn({
         email,
-        password: "me",
+        password,
       });
       if (error) {
         toast({
@@ -69,7 +65,7 @@ const Login = () => {
           render: () => <ErrorToast message={error.message} />,
         });
       } else {
-        alert("Check your email for the login link!");
+        console.log({ user });
       }
     } catch (error: any) {
       toast({
@@ -79,8 +75,6 @@ const Login = () => {
         status: "error",
         variant: "solid",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
