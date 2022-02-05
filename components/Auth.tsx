@@ -9,22 +9,17 @@ import {
   GridItem,
   Image,
   Input,
+  Link,
   SimpleGrid,
   useColorMode,
   useColorModeValue,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { supabase } from "../utils/supabaseClient";
-import ErrorToast from "./ErrorToast";
-
-type LoginForm = {
-  email: string;
-  password: string;
-};
+import { Form } from "../types/Form";
 
 const schema = yup
   .object({
@@ -32,51 +27,33 @@ const schema = yup
       .string()
       .email("Please provide a valid email")
       .required("Email is required"),
-    password: yup.string().required("Password is required"),
+    password: yup
+      .string()
+      .min(6, "Minimum password length is 6")
+      .required("Password is required"),
   })
   .required();
 
-const Login = () => {
+const Auth = ({
+  authType,
+  redirectUrl,
+  redirectText,
+  onSubmit,
+}: {
+  authType: string;
+  redirectUrl: string;
+  redirectText: string;
+  onSubmit: SubmitHandler<Form>;
+}) => {
   const { toggleColorMode, colorMode } = useColorMode();
   const color = useColorModeValue("brand.black", "brand.white");
-  const toast = useToast();
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm<LoginForm>({
+  } = useForm<Form>({
     resolver: yupResolver(schema),
   });
-
-  const onSubmit: SubmitHandler<LoginForm> = async ({ email, password }) => {
-    try {
-      const { error, user } = await supabase.auth.signIn({
-        email,
-        password,
-      });
-      if (error) {
-        toast({
-          title: error.message,
-          position: "top-right",
-          isClosable: true,
-          status: "error",
-          duration: 3000,
-          variant: "solid",
-          render: () => <ErrorToast message={error.message} />,
-        });
-      } else {
-        console.log({ user });
-      }
-    } catch (error: any) {
-      toast({
-        title: error.error_description || error.message,
-        position: "top-right",
-        isClosable: true,
-        status: "error",
-        variant: "solid",
-      });
-    }
-  };
 
   return (
     <Container maxW={"container.xl"} p={0}>
@@ -140,10 +117,15 @@ const Login = () => {
                   </FormErrorMessage>
                 </FormControl>
               </GridItem>
-              <Center>
-                <Button isLoading={isSubmitting} type="submit">
-                  Login
-                </Button>
+              <Center py={5}>
+                <VStack>
+                  <Button isLoading={isSubmitting} type="submit">
+                    {authType}
+                  </Button>
+                  <NextLink href={redirectUrl} passHref>
+                    <Link>{redirectText}</Link>
+                  </NextLink>
+                </VStack>
               </Center>
             </form>
           </SimpleGrid>
@@ -153,4 +135,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Auth;
