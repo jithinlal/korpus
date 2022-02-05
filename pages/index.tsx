@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import { Session } from "@supabase/gotrue-js";
 import Login from "./login";
+import { useStore } from "../store";
 
 const Home: NextPage = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -11,7 +12,7 @@ const Home: NextPage = () => {
     setSession(supabase.auth.session());
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      console.log({ session });
+      useStore.setState((state) => state.setUser(session?.user));
       setSession(session);
     });
   }, []);
