@@ -61,6 +61,7 @@ export const config = {
         _focus: {
           backgroundColor: mode("brand.black", "brand.white")(props),
           color: mode("brand.white", "brand.black")(props),
+          boxShadow: "none",
         },
       }),
       defaultProps: {
