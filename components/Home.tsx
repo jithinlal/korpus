@@ -1,19 +1,26 @@
 import Header from "./Header";
 import {
   Box,
+  Button,
   Center,
+  Flex,
   HStack,
   Icon,
+  Link,
   Text,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { MdArrowCircleUp, MdArrowCircleDown } from "react-icons/md";
 import { CgArrowsExchangeAltV } from "react-icons/cg";
 import TransactionBox from "./TransactionBox";
+import TransactionItem from "./TransactionItem";
 
 const Home = () => {
+  const mainColor = useColorModeValue("brand.white", "brand.black");
   const alterColor = useColorModeValue("brand.black", "brand.white");
+
   return (
     <>
       <Header>
@@ -124,6 +131,58 @@ const Home = () => {
                 </HStack>
               </TransactionBox>
             </Center>
+            <Flex w={"full"} align={"center"} justify={"center"}>
+              <VStack w={"full"}>
+                <Button
+                  my={2}
+                  bg={alterColor}
+                  color={mainColor}
+                  transition="background 0.8s"
+                  _focus={{
+                    backgroundColor: mainColor,
+                    color: alterColor,
+                  }}
+                >
+                  Add
+                </Button>
+                <Box
+                  borderWidth={2}
+                  borderColor={alterColor}
+                  w={"full"}
+                  borderRadius={"xl"}
+                >
+                  <HStack justify={"space-between"} px={2}>
+                    <NextLink href={"/"} passHref>
+                      <Link
+                        textDecorationLine={"underline"}
+                        _focus={{
+                          outline: 0,
+                        }}
+                      >
+                        Recent transactions
+                      </Link>
+                    </NextLink>
+                    <NextLink href={"/"} passHref>
+                      <Link
+                        textDecorationLine={"underline"}
+                        _focus={{
+                          outline: 0,
+                        }}
+                      >
+                        View all
+                      </Link>
+                    </NextLink>
+                  </HStack>
+                  <TransactionItem
+                    alterColor={alterColor}
+                    categoryIcon={CgArrowsExchangeAltV}
+                    category={"Dinner"}
+                    amount={12}
+                    date={"04 Feb 2022"}
+                  />
+                </Box>
+              </VStack>
+            </Flex>
           </VStack>
         </Box>
       </Header>

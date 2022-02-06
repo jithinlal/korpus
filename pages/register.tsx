@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Auth from "../components/Auth";
 import { useToast } from "@chakra-ui/react";
 import { SubmitHandler } from "react-hook-form";
-import { Form } from "../types/Form";
+import { Index } from "../types";
 import { supabase } from "../utils/supabaseClient";
 import ErrorToast from "../components/ErrorToast";
 import { useRouter } from "next/router";
@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 const Register: NextPage = () => {
   const toast = useToast();
   const router = useRouter();
-  const onSubmit: SubmitHandler<Form> = async ({ email, password }) => {
+  const onSubmit: SubmitHandler<Index> = async ({ email, password }) => {
     try {
       const { error } = await supabase.auth.signUp({
         email,

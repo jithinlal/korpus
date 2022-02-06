@@ -1,11 +1,6 @@
 import { FC } from "react";
 import { Box } from "@chakra-ui/react";
-
-interface RestProps {
-  alterColor: string;
-
-  [x: string]: any;
-}
+import { RestProps } from "../types";
 
 const TransactionBox: FC<RestProps> = ({ alterColor, children, ...rest }) => (
   <Box
