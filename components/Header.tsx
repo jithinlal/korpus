@@ -11,6 +11,8 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Text,
+  useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
@@ -18,16 +20,16 @@ import SidebarContent from "./SidebarContent";
 import { useStore } from "../store";
 import { supabase } from "../utils/supabaseClient";
 
-const Header = () => {
+const Header = ({ children }: { children: JSX.Element | string }) => {
   const sidebar = useDisclosure();
   const store = useStore();
   const bgColor = useColorModeValue("brand.white", "brand.black");
   const borderColor = useColorModeValue("brand.black", "brand.white");
+  const { toggleColorMode, colorMode } = useColorMode();
   const user = useStore.getState().user;
 
   return (
     <Box as={"section"} minH={"100vh"}>
-      <SidebarContent display={{ base: "none", md: "unset" }} />
       <Drawer
         isOpen={sidebar.isOpen}
         onClose={sidebar.onClose}
@@ -38,21 +40,22 @@ const Header = () => {
           <SidebarContent w={"full"} borderRight={"none"} />
         </DrawerContent>
       </Drawer>
-      <Box ml={{ base: 0, md: 60 }} transition={".3s ease"}>
+      <Box transition={".3s ease"} p={2}>
         <Flex
           as={"header"}
           align={"center"}
-          justify={{ base: "space-between", md: "flex-end" }}
+          justify={"space-between"}
           w={"full"}
           px={4}
           bg={bgColor}
-          borderBottomWidth={1}
+          borderWidth={2}
+          borderRadius={{ base: "md", md: "lg" }}
           borderColor={borderColor}
-          h={"14"}
+          h={14}
         >
           <IconButton
             aria-label={"Menu"}
-            display={{ base: "inline-flex", md: "none" }}
+            display={"inline-flex"}
             onClick={sidebar.onOpen}
             icon={<FiMenu />}
             size={"sm"}
@@ -60,6 +63,17 @@ const Header = () => {
               outline: 0,
             }}
           />
+          <Box
+            borderWidth={2}
+            px={2}
+            borderColor={borderColor}
+            borderRadius={"xl"}
+            borderStyle="dashed"
+          >
+            <Text fontSize="2xl" fontWeight={"bold"}>
+              Korpus
+            </Text>
+          </Box>
           <Flex align={"center"}>
             <Menu isLazy>
               <MenuButton
@@ -87,13 +101,12 @@ const Header = () => {
                 }}
                 _focus={{
                   outline: 0,
-                  // boxShadow:
-                  //   colorMode === "light"
-                  //     ? "0 0 0 0 rgba(0, 0, 0, 0)"
-                  //     : "0 0 0 0 rgba(255, 255, 255, 0.92)",
                 }}
               />
               <MenuList>
+                <MenuItem onClick={toggleColorMode}>
+                  Set {colorMode === "light" ? "dark theme" : "light theme"}
+                </MenuItem>
                 <MenuItem>{user?.email}</MenuItem>
                 <MenuItem
                   onClick={() => {
@@ -109,7 +122,7 @@ const Header = () => {
         </Flex>
 
         <Box as={"main"} p={4}>
-          <Box borderWidth="4px" borderStyle="dashed" rounded="md" h="96" />
+          {children}
         </Box>
       </Box>
     </Box>
