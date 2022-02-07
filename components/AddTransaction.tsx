@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   HStack,
   Input,
@@ -9,14 +10,21 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import { AddTransactionProps } from "../types";
+import dynamic from "next/dynamic";
 import { useDisclosure } from "@chakra-ui/hooks";
 import SelectComponent from "./Select";
+import { AddTransactionProps } from "../types";
+
+const Calendar = dynamic(() => import("./Calendar"), {
+  ssr: false,
+});
 
 const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
+  const modalInputBgColor = useColorModeValue("brand.white", "gray.700");
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -42,11 +50,26 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
           <ModalBody>
             <VStack>
               <HStack>
-                <Input placeholder={"Amount"} type={"number"} />
-                <Input placeholder={"Date"} type={"date"} />
+                <Input
+                  placeholder={"$"}
+                  type={"number"}
+                  backgroundColor={modalInputBgColor}
+                  _focus={{
+                    borderColor: modalInputBgColor,
+                  }}
+                />
+                <Calendar />
               </HStack>
-              <Input placeholder={"Note"} />
-              <SelectComponent />
+              <Input
+                placeholder={"Note"}
+                backgroundColor={modalInputBgColor}
+                _focus={{
+                  borderColor: modalInputBgColor,
+                }}
+              />
+              <Box w={"full"}>
+                <SelectComponent />
+              </Box>
             </VStack>
           </ModalBody>
 
