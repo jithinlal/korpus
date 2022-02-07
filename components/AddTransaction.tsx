@@ -9,12 +9,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   VStack,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { AddTransactionProps } from "../types";
 import { useDisclosure } from "@chakra-ui/hooks";
+import SelectComponent from "./Select";
 
 const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,18 +46,7 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
                 <Input placeholder={"Date"} type={"date"} />
               </HStack>
               <Input placeholder={"Note"} />
-              <Select placeholder="Select option">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option2">Option 2</option>
-                <option value="option2">Option 2</option>
-                <option value="option2">Option 2</option>
-                <option value="option2">Option 2</option>
-                <option value="option2">Option 2</option>
-                <option value="option2">Option 2</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-              </Select>
+              <SelectComponent />
             </VStack>
           </ModalBody>
 

@@ -68,6 +68,18 @@ export const config = {
         variant: null,
       },
     },
+    Select: {
+      baseStyle: (props: any) => ({
+        field: {
+          color: mode("brand.black", "brand.white")(props),
+          borderColor: mode("brand.black", "brand.white")(props),
+          borderWidth: 1,
+        },
+      }),
+      defaultProps: {
+        variant: null,
+      },
+    },
   },
 };
 
