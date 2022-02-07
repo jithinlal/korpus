@@ -1,13 +1,8 @@
 import { useColorMode, useColorModeValue } from "@chakra-ui/react";
 import Select from "react-select";
+import { Category } from "../utils/category";
 
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
-
-const SelectComponent = () => {
+const SelectComponent = ({ onChange }: { onChange: any }) => {
   const mainColor = useColorModeValue("brand.white", "brand.black");
   const alterColor = useColorModeValue("brand.black", "brand.white");
   const { colorMode } = useColorMode();
@@ -15,7 +10,15 @@ const SelectComponent = () => {
   return (
     <Select
       placeholder={"Category"}
-      options={options}
+      options={Category}
+      onChange={onChange}
+      // @ts-ignore
+      getOptionLabel={(e) => (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {e.icon}
+          <span style={{ marginLeft: 5 }}>{e.label}</span>
+        </div>
+      )}
       styles={{
         placeholder: (styles) => {
           return { ...styles, color: alterColor };

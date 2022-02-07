@@ -25,3 +25,11 @@ export type TransactionItemProps = {
   color?: string;
   [x: string]: any;
 };
+
+export type TransactionStore = {
+  id: number;
+  category: number;
+  amount: number;
+  date: string;
+  note: string;
+};

@@ -16,10 +16,17 @@ import { CgArrowsExchangeAltV } from "react-icons/cg";
 import TransactionBox from "./TransactionBox";
 import TransactionItem from "./TransactionItem";
 import AddTransaction from "./AddTransaction";
+import { useTransactionStore } from "../store/transaction";
+import { useEffect } from "react";
 
 const Home = () => {
   const mainColor = useColorModeValue("brand.white", "brand.black");
   const alterColor = useColorModeValue("brand.black", "brand.white");
+  const transactions = useTransactionStore().transactions;
+
+  useEffect(() => {
+    useTransactionStore.getState().fetchTransactions();
+  }, []);
 
   return (
     <>
@@ -163,13 +170,19 @@ const Home = () => {
                     </NextLink>
                   </HStack>
                   <Box>
-                    <TransactionItem
-                      alterColor={alterColor}
-                      category={CgArrowsExchangeAltV}
-                      description={"Dinner"}
-                      amount={12}
-                      date={"04 Feb 2022"}
-                    />
+                    {transactions &&
+                      transactions.map((transaction, index) => {
+                        return (
+                          <TransactionItem
+                            key={index}
+                            alterColor={alterColor}
+                            category={CgArrowsExchangeAltV}
+                            description={"Dinner"}
+                            amount={12}
+                            date={"04 Feb 2022"}
+                          />
+                        );
+                      })}
                   </Box>
                 </Box>
               </VStack>

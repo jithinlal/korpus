@@ -1,34 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
-import DatePicker, {
-  DayValue,
-} from "@hassanmojab/react-modern-calendar-datepicker";
-import dayjs from "dayjs";
+import DatePicker from "@hassanmojab/react-modern-calendar-datepicker";
 import { Input, useColorModeValue } from "@chakra-ui/react";
+import { MonthName } from "../utils/monthName";
 
-const monthNames = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-const App = () => {
+const Calendar = ({
+  selectedDay,
+  changeSelectedDay,
+}: {
+  selectedDay: any;
+  changeSelectedDay: any;
+}) => {
   const modalInputBgColor = useColorModeValue("brand.white", "gray.700");
 
-  const [selectedDay, setSelectedDay] = useState<DayValue>({
-    day: dayjs().date(),
-    month: dayjs().month() + 1,
-    year: dayjs().year(),
-  });
+  // const [selectedDay, setSelectedDay] = useState<DayValue>({
+  //   day: dayjs().date(),
+  //   month: dayjs().month() + 1,
+  //   year: dayjs().year(),
+  // });
 
   const renderCustomInput = ({ ref }: { ref: any }) => (
     <Input
@@ -37,7 +26,7 @@ const App = () => {
       placeholder="Date"
       value={
         selectedDay
-          ? `${selectedDay.day} ${monthNames[selectedDay.month - 1]} ${
+          ? `${selectedDay.day} ${MonthName[selectedDay.month - 1]} ${
               selectedDay.year
             }`
           : ""
@@ -52,7 +41,7 @@ const App = () => {
   return (
     <DatePicker
       value={selectedDay}
-      onChange={(e: any) => setSelectedDay(e)}
+      onChange={(e: any) => changeSelectedDay(e)}
       renderInput={renderCustomInput}
       calendarClassName="responsive-calendar"
       calendarTodayClassName="custom-today-day"
@@ -62,4 +51,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Calendar;

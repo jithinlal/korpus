@@ -13,11 +13,17 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useState } from "react";
 import dynamic from "next/dynamic";
 import { useDisclosure } from "@chakra-ui/hooks";
 import SelectComponent from "./Select";
 import { AddTransactionProps } from "../types";
+import { DayValue } from "@hassanmojab/react-modern-calendar-datepicker";
+import dayjs from "dayjs";
+import { supabase } from "../utils/supabaseClient";
+import { MonthName } from "../utils/monthName";
+import { useStore } from "../store/user";
+import { useTransactionStore } from "../store/transaction";
 
 const Calendar = dynamic(() => import("./Calendar"), {
   ssr: false,
@@ -26,6 +32,16 @@ const Calendar = dynamic(() => import("./Calendar"), {
 const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
   const modalInputBgColor = useColorModeValue("brand.white", "gray.700");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [category, setCategory] = useState(null);
+  const [selectedDay, setSelectedDay] = useState<DayValue>({
+    day: dayjs().date(),
+    month: dayjs().month() + 1,
+    year: dayjs().year(),
+  });
+  const [note, setNote] = useState("");
+  const [amount, setAmount] = useState("");
+  const [loading, setLoading] = useState(false);
+
   return (
     <>
       <Button
@@ -57,8 +73,13 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
                   _focus={{
                     borderColor: modalInputBgColor,
                   }}
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
                 />
-                <Calendar />
+                <Calendar
+                  selectedDay={selectedDay}
+                  changeSelectedDay={setSelectedDay}
+                />
               </HStack>
               <Input
                 placeholder={"Note"}
@@ -66,9 +87,11 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
                 _focus={{
                   borderColor: modalInputBgColor,
                 }}
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
               />
               <Box w={"full"}>
-                <SelectComponent />
+                <SelectComponent onChange={setCategory} />
               </Box>
             </VStack>
           </ModalBody>
@@ -76,10 +99,46 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
           <ModalFooter>
             <Button
               bg={alterColor}
+              isLoading={loading}
               color={mainColor}
               _focus={{
-                backgroundColor: mainColor,
+                backgroundColor: modalInputBgColor,
                 color: alterColor,
+              }}
+              onClick={async () => {
+                if (category && selectedDay) {
+                  setLoading(true);
+                  const { data, error } = await supabase
+                    .from("transactions")
+                    .insert([
+                      {
+                        created_by: useStore?.getState()?.user?.id,
+                        // @ts-ignore
+                        category: +category.value,
+                        note,
+                        amount: +amount,
+                        date: `${selectedDay.day} ${
+                          MonthName[selectedDay.month - 1]
+                        } ${selectedDay.year}`,
+                      },
+                    ]);
+                  if (error) {
+                    setLoading(false);
+                  } else {
+                    setLoading(false);
+                    const { id, category, amount, date, note } = data as any;
+                    useTransactionStore.setState((state) =>
+                      state.addTransaction({
+                        id: id,
+                        category: category,
+                        amount: amount,
+                        date: date,
+                        note: note,
+                      })
+                    );
+                    onClose();
+                  }
+                }
               }}
             >
               ADD

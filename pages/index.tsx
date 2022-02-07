@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import { Session, User } from "@supabase/gotrue-js";
 import Login from "./login";
-import { useStore } from "../store";
+import { useStore } from "../store/user";
 import Home from "../components/Home";
 
 const Index: NextPage = () => {
