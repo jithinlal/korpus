@@ -10,11 +10,18 @@ export type RestProps = {
   [x: string]: any;
 };
 
+export type AddTransactionProps = {
+  alterColor: string;
+  mainColor: string;
+  [x: string]: any;
+};
+
 export type TransactionItemProps = {
   alterColor: string;
-  categoryIcon: IconType;
+  category: IconType;
   amount: number;
-  category: string;
+  description: string;
   date: string;
+  color?: string;
   [x: string]: any;
 };

@@ -1,7 +1,6 @@
 import Header from "./Header";
 import {
   Box,
-  Button,
   Center,
   Flex,
   HStack,
@@ -16,6 +15,7 @@ import { MdArrowCircleUp, MdArrowCircleDown } from "react-icons/md";
 import { CgArrowsExchangeAltV } from "react-icons/cg";
 import TransactionBox from "./TransactionBox";
 import TransactionItem from "./TransactionItem";
+import AddTransaction from "./AddTransaction";
 
 const Home = () => {
   const mainColor = useColorModeValue("brand.white", "brand.black");
@@ -133,18 +133,7 @@ const Home = () => {
             </Center>
             <Flex w={"full"} align={"center"} justify={"center"}>
               <VStack w={"full"}>
-                <Button
-                  my={2}
-                  bg={alterColor}
-                  color={mainColor}
-                  transition="background 0.8s"
-                  _focus={{
-                    backgroundColor: mainColor,
-                    color: alterColor,
-                  }}
-                >
-                  Add
-                </Button>
+                <AddTransaction alterColor={alterColor} mainColor={mainColor} />
                 <Box
                   borderWidth={2}
                   borderColor={alterColor}
@@ -173,13 +162,15 @@ const Home = () => {
                       </Link>
                     </NextLink>
                   </HStack>
-                  <TransactionItem
-                    alterColor={alterColor}
-                    categoryIcon={CgArrowsExchangeAltV}
-                    category={"Dinner"}
-                    amount={12}
-                    date={"04 Feb 2022"}
-                  />
+                  <Box>
+                    <TransactionItem
+                      alterColor={alterColor}
+                      category={CgArrowsExchangeAltV}
+                      description={"Dinner"}
+                      amount={12}
+                      date={"04 Feb 2022"}
+                    />
+                  </Box>
                 </Box>
               </VStack>
             </Flex>

@@ -4,10 +4,11 @@ import { TransactionItemProps } from "../types";
 
 const TransactionItem: FC<TransactionItemProps> = ({
   alterColor,
-  categoryIcon,
   category,
+  description,
   amount,
   date,
+  color,
   ...rest
 }) => {
   return (
@@ -21,10 +22,10 @@ const TransactionItem: FC<TransactionItemProps> = ({
       {...rest}
     >
       <HStack justify={"space-between"} px={1}>
-        <Icon as={categoryIcon} w={10} h={10} color={alterColor} />
+        <Icon as={category} w={10} h={10} color={alterColor} />
         <VStack justify={"center"}>
           <Text color={"brand.error"}>${amount}</Text>
-          <Text>{category}</Text>
+          <Text>{description}</Text>
         </VStack>
         <Text>{date}</Text>
       </HStack>
