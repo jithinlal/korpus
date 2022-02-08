@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import {
   Box,
   Button,
   Center,
   Skeleton,
   Stack,
-  Text,
   useColorMode,
 } from "@chakra-ui/react";
 import Header from "../components/Header";
-import { useTransactionStore } from "../store/transaction";
 import TransactionItem from "../components/TransactionItem";
 import { findCategory } from "../utils/category";
 import { supabase } from "../utils/supabaseClient";
@@ -24,7 +22,7 @@ const Transactions: NextPage = () => {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
-    const { from, to } = getPagination(page, 2);
+    const { from, to } = getPagination(page, 5);
     // setLoading(true);
     supabase
       .from("transactions")
