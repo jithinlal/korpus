@@ -3,10 +3,13 @@ import {
   Box,
   Flex,
   Image,
+  Link,
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { MdHome } from "react-icons/md";
+import { GiMoneyStack } from "react-icons/gi";
+import NextLink from "next/link";
 import NavItem from "./NavItem";
 
 const SidebarContent = (props: any) => {
@@ -49,7 +52,36 @@ const SidebarContent = (props: any) => {
         fontSize={"sm"}
         aria-label={"Main Navigation"}
       >
-        <NavItem icon={MdHome}>Home</NavItem>
+        <NavItem icon={MdHome}>
+          <NextLink href={"/"} passHref>
+            <Link
+              _focus={{
+                outline: 0,
+              }}
+              _hover={{
+                textDecoration: "none",
+              }}
+              w={"full"}
+            >
+              Home
+            </Link>
+          </NextLink>
+        </NavItem>
+        <NavItem icon={GiMoneyStack}>
+          <NextLink href={"/transactions"} passHref>
+            <Link
+              _focus={{
+                outline: 0,
+              }}
+              _hover={{
+                textDecoration: "none",
+              }}
+              w={"full"}
+            >
+              View all transactions
+            </Link>
+          </NextLink>
+        </NavItem>
       </Flex>
     </Box>
   );

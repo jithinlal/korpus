@@ -14,9 +14,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { MdArrowCircleUp, MdArrowCircleDown } from "react-icons/md";
 import { useEffect, useState } from "react";
-import { CgArrowsExchangeAltV } from "react-icons/cg";
 import TransactionBox from "./TransactionBox";
 import TransactionItem from "./TransactionItem";
 import AddTransaction from "./AddTransaction";
@@ -25,6 +23,8 @@ import {
   useTransactionStore,
 } from "../store/transaction";
 import { findCategory } from "../utils/category";
+import { GiReceiveMoney, GiPayMoney } from "react-icons/gi";
+import { FaBalanceScale } from "react-icons/fa";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
@@ -44,6 +44,8 @@ const Home = () => {
       });
 
     useBalanceSheetStore.getState().fetchBalanceSheet();
+
+    return () => {};
   }, []);
 
   return (
@@ -63,12 +65,7 @@ const Home = () => {
               >
                 <TransactionBox alterColor={alterColor}>
                   <HStack justify={{ md: "space-around" }}>
-                    <Icon
-                      as={MdArrowCircleUp}
-                      w={10}
-                      h={10}
-                      color={"brand.error"}
-                    />
+                    <Icon as={GiPayMoney} w={10} h={10} color={"brand.error"} />
                     <VStack>
                       <Text
                         fontWeight={"semibold"}
@@ -96,7 +93,7 @@ const Home = () => {
                 <TransactionBox alterColor={alterColor}>
                   <HStack justify={{ md: "space-around" }}>
                     <Icon
-                      as={MdArrowCircleDown}
+                      as={GiReceiveMoney}
                       w={10}
                       h={10}
                       color={"brand.success"}
@@ -130,7 +127,7 @@ const Home = () => {
                 <TransactionBox alterColor={alterColor}>
                   <HStack justify={{ md: "space-around" }}>
                     <Icon
-                      as={CgArrowsExchangeAltV}
+                      as={FaBalanceScale}
                       w={10}
                       h={10}
                       color={alterColor}
@@ -173,17 +170,8 @@ const Home = () => {
                     borderRadius={"xl"}
                   >
                     <HStack justify={"space-between"} px={2}>
-                      <NextLink href={"/"} passHref>
-                        <Link
-                          textDecorationLine={"underline"}
-                          _focus={{
-                            outline: 0,
-                          }}
-                        >
-                          Recent transactions
-                        </Link>
-                      </NextLink>
-                      <NextLink href={"/"} passHref>
+                      <Text fontWeight={"bold"}>Recent transactions</Text>
+                      <NextLink href={"/transactions"} passHref>
                         <Link
                           textDecorationLine={"underline"}
                           _focus={{
