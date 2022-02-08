@@ -11,6 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
   useColorModeValue,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { FC, useState } from "react";
@@ -30,6 +31,7 @@ const Calendar = dynamic(() => import("./Calendar"), {
 });
 
 const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
+  const toast = useToast();
   const modalInputBgColor = useColorModeValue("brand.white", "gray.700");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [category, setCategory] = useState(null);
@@ -106,7 +108,7 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
                 color: alterColor,
               }}
               onClick={async () => {
-                if (category && selectedDay) {
+                if (category && selectedDay && amount !== "") {
                   setLoading(true);
                   const { data, error } = await supabase
                     .from("transactions")
@@ -124,9 +126,18 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
                     ]);
                   if (error) {
                     setLoading(false);
+                    toast({
+                      title: error.message,
+                      position: "top-right",
+                      isClosable: true,
+                      status: "error",
+                      variant: "solid",
+                    });
                   } else {
                     setLoading(false);
-                    const { id, category, amount, date, note } = data as any;
+                    const { id, category, amount, date, note } = (
+                      data as any
+                    )[0];
                     useTransactionStore.setState((state) =>
                       state.addTransaction({
                         id: id,
@@ -138,6 +149,14 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
                     );
                     onClose();
                   }
+                } else {
+                  toast({
+                    title: "Please select category or add an amount",
+                    position: "top-right",
+                    isClosable: true,
+                    status: "error",
+                    variant: "solid",
+                  });
                 }
               }}
             >

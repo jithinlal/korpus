@@ -40,12 +40,12 @@ const Header = ({ children }: { children: JSX.Element | string }) => {
           <SidebarContent w={"full"} borderRight={"none"} />
         </DrawerContent>
       </Drawer>
-      <Box transition={".3s ease"} p={2}>
+      <Box transition={".3s ease"} p={2} align={"center"}>
         <Flex
           as={"header"}
           align={"center"}
           justify={"space-between"}
-          w={"full"}
+          w={{ base: "full", lg: "70%" }}
           px={4}
           bg={bgColor}
           borderWidth={2}

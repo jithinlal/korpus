@@ -1,4 +1,10 @@
-import { useColorMode, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Icon,
+  Text,
+  useColorMode,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import Select from "react-select";
 import { Category } from "../utils/category";
 
@@ -9,15 +15,24 @@ const SelectComponent = ({ onChange }: { onChange: any }) => {
 
   return (
     <Select
+      isSearchable={false}
       placeholder={"Category"}
       options={Category}
       onChange={onChange}
       // @ts-ignore
       getOptionLabel={(e) => (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {e.icon}
-          <span style={{ marginLeft: 5 }}>{e.label}</span>
-        </div>
+        <Box display={"flex"} alignItems={"center"}>
+          <Icon
+            as={e.icon}
+            color={colorMode === "dark" ? e.dColor : e.lColor}
+          />
+          <Text
+            style={{ marginLeft: 5 }}
+            color={colorMode === "dark" ? e.dColor : e.lColor}
+          >
+            {e.label}
+          </Text>
+        </Box>
       )}
       styles={{
         placeholder: (styles) => {
@@ -68,9 +83,9 @@ const SelectComponent = ({ onChange }: { onChange: any }) => {
         option: (styles, { isFocused, isSelected }) => {
           const mainColor = colorMode === "dark" ? "#2D3748" : "white";
           const mainFocusColor = colorMode === "dark" ? "black" : "white";
-          const mainSelectColor = colorMode === "dark" ? "white" : "black";
+          const mainSelectColor = colorMode === "dark" ? "#212121" : "#e1e1e1";
           const alterColor = colorMode === "dark" ? "white" : "#2D3748";
-          const alterFocusColor = colorMode === "dark" ? "white" : "black";
+          const alterFocusColor = colorMode === "dark" ? "#212121" : "#e1e1e1";
           const alterSelectColor = colorMode === "dark" ? "black" : "white";
 
           return {
@@ -86,7 +101,7 @@ const SelectComponent = ({ onChange }: { onChange: any }) => {
               ? mainFocusColor
               : alterColor,
             ":active": {
-              backgroundColor: alterColor,
+              backgroundColor: alterFocusColor,
               color: mainColor,
             },
           };

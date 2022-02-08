@@ -21,10 +21,10 @@ const TransactionItem: FC<TransactionItemProps> = ({
       borderRadius={"2xl"}
       {...rest}
     >
-      <HStack justify={"space-between"} px={1}>
+      <HStack justify={"space-between"} px={{ base: 2, md: 4 }}>
         <Icon as={category} w={10} h={10} color={alterColor} />
         <VStack justify={"center"}>
-          <Text color={"brand.error"}>${amount}</Text>
+          <Text color={color}>${amount}</Text>
           <Text>{description}</Text>
         </VStack>
         <Text>{date}</Text>

@@ -22,7 +22,8 @@ export type TransactionItemProps = {
   amount: number;
   description: string;
   date: string;
-  color?: string;
+  lColor?: string;
+  dColor?: string;
   [x: string]: any;
 };
 

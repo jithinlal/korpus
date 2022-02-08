@@ -4,11 +4,11 @@ import { SubmitHandler } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
 import ErrorToast from "../components/ErrorToast";
 import { useToast } from "@chakra-ui/react";
-import { Index } from "../types";
+import { Form } from "../types";
 
 const Login: NextPage = () => {
   const toast = useToast();
-  const onSubmit: SubmitHandler<Index> = async ({ email, password }) => {
+  const onSubmit: SubmitHandler<Form> = async ({ email, password }) => {
     try {
       const { error } = await supabase.auth.signIn({
         email,

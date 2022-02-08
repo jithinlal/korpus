@@ -6,7 +6,7 @@ import { useStore } from "./user";
 interface TodoState {
   transactions: TransactionStore[];
   addTransaction: (transaction: TransactionStore) => void;
-  fetchTransactions: () => void;
+  fetchTransactions: () => Promise<void>;
 }
 
 export const useTransactionStore = create<TodoState>((set) => ({
@@ -15,7 +15,9 @@ export const useTransactionStore = create<TodoState>((set) => ({
     const { error, data } = await supabase
       .from("transactions")
       .select()
-      .eq("created_by", useStore?.getState()?.user?.id);
+      .eq("created_by", useStore?.getState()?.user?.id)
+      .order("created_at", { ascending: false })
+      .limit(5);
     if (!error) {
       const interTransactions = data!.map((item) => ({
         id: item.id,
@@ -31,6 +33,6 @@ export const useTransactionStore = create<TodoState>((set) => ({
   },
   addTransaction: (transaction: TransactionStore) =>
     set((state) => ({
-      transactions: [...state.transactions, transaction],
+      transactions: [transaction, ...state.transactions],
     })),
 }));
