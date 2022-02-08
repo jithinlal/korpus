@@ -20,7 +20,10 @@ import { CgArrowsExchangeAltV } from "react-icons/cg";
 import TransactionBox from "./TransactionBox";
 import TransactionItem from "./TransactionItem";
 import AddTransaction from "./AddTransaction";
-import { useTransactionStore } from "../store/transaction";
+import {
+  useBalanceSheetStore,
+  useTransactionStore,
+} from "../store/transaction";
 import { findCategory } from "../utils/category";
 
 const Home = () => {
@@ -29,6 +32,7 @@ const Home = () => {
   const mainColor = useColorModeValue("brand.white", "brand.black");
   const alterColor = useColorModeValue("brand.black", "brand.white");
   const transactions = useTransactionStore().transactions;
+  const balanceSheet = useBalanceSheetStore().balanceSheet;
 
   useEffect(() => {
     setLoading(true);
@@ -38,6 +42,8 @@ const Home = () => {
       .finally(() => {
         setLoading(false);
       });
+
+    useBalanceSheetStore.getState().fetchBalanceSheet();
   }, []);
 
   return (
@@ -82,7 +88,7 @@ const Home = () => {
                           md: "18",
                         }}
                       >
-                        $100
+                        ${balanceSheet.spending}
                       </Text>
                     </VStack>
                   </HStack>
@@ -114,7 +120,7 @@ const Home = () => {
                           md: "18",
                         }}
                       >
-                        $10
+                        ${balanceSheet.income}
                       </Text>
                     </VStack>
                   </HStack>
@@ -148,7 +154,7 @@ const Home = () => {
                           md: "18",
                         }}
                       >
-                        $10
+                        ${balanceSheet.balance}
                       </Text>
                     </VStack>
                   </HStack>
@@ -202,7 +208,6 @@ const Home = () => {
                           return (
                             <TransactionItem
                               key={index}
-                              alterColor={alterColor}
                               color={
                                 colorMode === "dark"
                                   ? findCategory(transaction.category)!.dColor

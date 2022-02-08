@@ -24,7 +24,11 @@ import dayjs from "dayjs";
 import { supabase } from "../utils/supabaseClient";
 import { MonthName } from "../utils/monthName";
 import { useStore } from "../store/user";
-import { useTransactionStore } from "../store/transaction";
+import {
+  useBalanceSheetStore,
+  useTransactionStore,
+} from "../store/transaction";
+import { findCategory } from "../utils/category";
 
 const Calendar = dynamic(() => import("./Calendar"), {
   ssr: false,
@@ -108,6 +112,7 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
                 color: alterColor,
               }}
               onClick={async () => {
+                const type = findCategory(+(category as any).value)!.type;
                 if (category && selectedDay && amount !== "") {
                   setLoading(true);
                   const { data, error } = await supabase
@@ -115,13 +120,13 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
                     .insert([
                       {
                         created_by: useStore?.getState()?.user?.id,
-                        // @ts-ignore
-                        category: +category.value,
+                        category: +(category as any).value,
                         note,
                         amount: +amount,
                         date: `${selectedDay.day} ${
                           MonthName[selectedDay.month - 1]
                         } ${selectedDay.year}`,
+                        type,
                       },
                     ]);
                   if (error) {
@@ -147,7 +152,18 @@ const AddTransaction: FC<AddTransactionProps> = ({ alterColor, mainColor }) => {
                         note: note,
                       })
                     );
+                    useBalanceSheetStore.setState((state) =>
+                      state.updateBalanceSheet(amount, type)
+                    );
                     onClose();
+                    setCategory(null);
+                    setSelectedDay({
+                      day: dayjs().date(),
+                      month: dayjs().month() + 1,
+                      year: dayjs().year(),
+                    });
+                    setNote("");
+                    setAmount("");
                   }
                 } else {
                   toast({

@@ -13,7 +13,6 @@ const Index: NextPage = () => {
     setSession(supabase.auth.session());
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      console.log({ session });
       if (session) {
         useStore.setState((state) => state.setUser(session?.user as User));
       } else {

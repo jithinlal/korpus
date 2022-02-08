@@ -18,8 +18,9 @@ export const Category = [
     icon: FaReceipt,
     label: "Bills & Utilities",
     id: "Bills & Utilities",
-    lColor: "#03506F",
+    lColor: "#219F94",
     dColor: "#FFAFAF",
+    type: "NEGATIVE",
   },
   {
     value: 2,
@@ -28,6 +29,7 @@ export const Category = [
     id: "Entertainment",
     lColor: "#E63E6D",
     dColor: "#91C788",
+    type: "NEGATIVE",
   },
   {
     value: 3,
@@ -36,6 +38,7 @@ export const Category = [
     id: "Food & Drinks",
     lColor: "#7A0BC0",
     dColor: "#FFAB76",
+    type: "NEGATIVE",
   },
   {
     value: 4,
@@ -44,6 +47,7 @@ export const Category = [
     id: "Home",
     lColor: "#FA58B6",
     dColor: "#E7FBBE",
+    type: "NEGATIVE",
   },
   {
     value: 5,
@@ -52,6 +56,7 @@ export const Category = [
     id: "Investments",
     lColor: "#2D4263",
     dColor: "#F999B7",
+    type: "NEGATIVE",
   },
   {
     value: 6,
@@ -60,6 +65,7 @@ export const Category = [
     id: "Insurance",
     lColor: "#C84B31",
     dColor: "#84DFFF",
+    type: "NEGATIVE",
   },
   {
     value: 7,
@@ -68,6 +74,7 @@ export const Category = [
     id: "Health",
     lColor: "#064663",
     dColor: "#C3B091",
+    type: "NEGATIVE",
   },
   {
     value: 8,
@@ -76,6 +83,7 @@ export const Category = [
     id: "Shopping",
     lColor: "#864879",
     dColor: "#C8E3D4",
+    type: "NEGATIVE",
   },
   {
     value: 9,
@@ -84,6 +92,7 @@ export const Category = [
     id: "Salary",
     lColor: "#1E5128",
     dColor: "#B5DEFF",
+    type: "POSITIVE",
   },
   {
     value: 10,
@@ -92,14 +101,25 @@ export const Category = [
     id: "Services & Sale",
     lColor: "#950101",
     dColor: "#C9CCD5",
+    type: "POSITIVE",
   },
   {
     value: 11,
     icon: FaDice,
-    label: "Others",
-    id: "Others",
-    lColor: "#3D2C8D",
+    label: "Other Spending",
+    id: "Other Spending",
+    lColor: "#d7035a",
+    dColor: "#E93B81",
+    type: "NEGATIVE",
+  },
+  {
+    value: 12,
+    icon: FaDice,
+    label: "Other Income",
+    id: "Other Income",
+    lColor: "#03b97e",
     dColor: "#28FFBF",
+    type: "POSITIVE",
   },
 ];
 

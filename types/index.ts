@@ -17,13 +17,11 @@ export type AddTransactionProps = {
 };
 
 export type TransactionItemProps = {
-  alterColor: string;
   category: IconType;
   amount: number;
   description: string;
   date: string;
-  lColor?: string;
-  dColor?: string;
+  color?: string;
   [x: string]: any;
 };
 
