@@ -46,7 +46,9 @@ export const useTransactionStore = create<TransactionState>((set) => ({
 export const useBalanceSheetStore = create<BalanceSheetState>((set) => ({
   balanceSheet: { income: 0, spending: 0, balance: 0 },
   fetchBalanceSheet: async () => {
-    const { error, data } = await supabase.rpc("balance_sheet").select("*");
+    const { error, data } = await supabase
+      .rpc("balance_sheet", { user_id: useStore?.getState()?.user?.id })
+      .select("*");
     if (!error) {
       if (data?.length !== 0) {
         const income = data!.find((item) => item.amount_type === "POSITIVE")
