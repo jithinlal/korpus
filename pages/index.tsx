@@ -1,26 +1,10 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
-import { supabase } from "../utils/supabaseClient";
-import { Session, User } from "@supabase/gotrue-js";
 import Login from "./login";
-import { useStore } from "../store/user";
 import Home from "../components/Home";
+import { useAuth } from "../hooks/useAuth";
 
 const Index: NextPage = () => {
-  const [session, setSession] = useState<Session | null>(null);
-
-  useEffect(() => {
-    setSession(supabase.auth.session());
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        useStore.setState((state) => state.setUser(session?.user as User));
-      } else {
-        useStore.setState((state) => state.removeUser);
-      }
-      setSession(session);
-    });
-  }, []);
+  const session = useAuth();
 
   return <>{!session ? <Login /> : <Home />}</>;
 };

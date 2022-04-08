@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { NextPage } from "next";
+import { useState } from "react";
+import { NextPage, GetServerSideProps } from "next";
 import {
   Box,
   Button,
@@ -12,32 +12,17 @@ import Header from "../components/Header";
 import TransactionItem from "../components/TransactionItem";
 import { findCategory } from "../utils/category";
 import { supabase } from "../utils/supabaseClient";
-import { useStore } from "../store/user";
-import { TransactionStore } from "../types";
+import { useRouter } from "next/router";
 
-const Transactions: NextPage = () => {
+// @ts-ignore
+const Transactions: NextPage = ({ data: transactions, count, page }) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [transactions, setTransactions] = useState<TransactionStore[] | []>([]);
-  const [page, setPage] = useState(0);
   const { colorMode } = useColorMode();
 
-  useEffect(() => {
-    const { from, to } = getPagination(page, 5);
-    // setLoading(true);
-    supabase
-      .from("transactions")
-      .select()
-      .eq("created_by", useStore?.getState()?.user?.id)
-      .order("created_at", { ascending: false })
-      .range(from, to)
-      .then(({ data, error }) => {
-        setTransactions((transaction) => [
-          ...transaction,
-          ...(data as TransactionStore[]),
-        ]);
-        // setLoading(false);
-      });
-  }, [page]);
+  if (!supabase.auth.session()) {
+    router.push("/");
+  }
 
   return (
     <>
@@ -53,7 +38,7 @@ const Transactions: NextPage = () => {
               </Stack>
             ) : (
               transactions &&
-              transactions.map((transaction, index) => {
+              transactions.map((transaction: any, index: number) => {
                 return (
                   <TransactionItem
                     key={index}
@@ -70,9 +55,15 @@ const Transactions: NextPage = () => {
                 );
               })
             )}
-            <Center py={5}>
-              <Button onClick={() => setPage(page + 1)}>Load more...</Button>
-            </Center>
+            {transactions.length < count && (
+              <Center py={5}>
+                <Button
+                  onClick={() => router.push(`/transactions?page=${page + 1}`)}
+                >
+                  Load more...
+                </Button>
+              </Center>
+            )}
           </Box>
         </Center>
       </Header>
@@ -86,6 +77,29 @@ const getPagination = (page: number, size: number) => {
   const to = page ? from + size - 1 : size - 1;
 
   return { from, to };
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  query: { page = 0, id = null },
+  req,
+}) => {
+  const { from, to } = getPagination(+page, 2);
+  const { user, token } = await supabase.auth.api.getUserByCookie(req);
+  supabase.auth.setAuth(token!);
+  const { data, count } = await supabase
+    .from("transactions")
+    .select("*", { count: "exact" })
+    .eq("created_by", user?.id)
+    .order("created_at", { ascending: false })
+    .range(0, to);
+
+  return {
+    props: {
+      data: data,
+      count: count,
+      page: +page,
+    },
+  };
 };
 
 export default Transactions;
